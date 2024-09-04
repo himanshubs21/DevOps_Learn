@@ -171,7 +171,41 @@ modification time changes, the script displays a message indicating the file has
 the stat command for comparisons.
 
 #######
+#!/bin/bash
 
+# Prompt the user to enter the file path to monitor
+read -p "Enter the full path of the file to monitor: " FILE_TO_MONITOR
+
+# Check if the file exists
+if [ ! -f "$FILE_TO_MONITOR" ]; then
+    echo "Error: File not found!"
+    exit 1
+fi
+
+# Function to get the last modification time of the file
+get_modification_time() {
+    stat -c %Y "$FILE_TO_MONITOR"
+}
+
+# Initial modification time
+last_mod_time=$(get_modification_time)
+
+echo "Monitoring changes to: $FILE_TO_MONITOR"
+
+# Loop to continuously monitor the file
+while true; do
+    # Get the current modification time
+    current_mod_time=$(get_modification_time)
+
+    # Check if the modification time has changed
+    if [ "$current_mod_time" != "$last_mod_time" ]; then
+        echo "The file $FILE_TO_MONITOR has been modified."
+        last_mod_time=$current_mod_time
+    fi
+
+    # Sleep for a short period before checking again
+    sleep 2
+done
 #######
 
 
