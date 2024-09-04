@@ -1,0 +1,184 @@
+Level 100
+1. Time Announcer: Write a script that displays a personalized greeting along with the current time
+every minute. For example, "Good morning, Alice! It's Wednesday, 27 March 2024 11:15 AM." (Use
+date and a loop to update every minute).
+
+#####
+#!/bin/bash
+echo "Please enter your name"
+read name
+while true; do
+        timest=$(date "+%A, %d %B %Y %I:%M %p")
+        echo "Good morning, $name! it's $timest."
+        sleep 60
+done
+######
+
+
+
+2. System Uptime Monitor: Write a script that displays the system uptime and refreshes it every 5
+seconds. Use the uptime command and a loop to achieve real-time updating.
+
+#####
+#!/bin/bash
+
+while true;do
+        echo $(uptime)
+        sleep 5
+done
+#####
+
+
+3. Interactive File Size Check: Write a script that prompts the user for a file path and displays the file
+size in real-time as the user types (using backspace for corrections). Employ the read command and
+the du -s command to check size.
+
+#########
+#!/bin/bash
+
+# Function to get file size
+get_file_size() {
+    if [ -e "$1" ]; then
+        du -sh "$1" | awk '{print $1}'
+    else
+        echo "File does not exist"
+    fi
+}
+
+# Prompt the user for a file path and handle real-time input
+echo -n "Enter the file path: "
+stty -echo -icanon time 0 min 1
+file_path=""
+while true; do
+    char=$(dd bs=1 count=1 2>/dev/null)
+    if [ -z "$char" ]; then
+        continue
+    fi
+    if [ "$char" = $'\177' ]; then # Handle backspace
+        if [ ${#file_path} -gt 0 ]; then
+            file_path="${file_path:0:${#file_path}-1}"
+            echo -ne "\b \b"
+        fi
+    elif [ "$char" = $'\n' ]; then
+        break
+    else
+        file_path+="$char"
+        echo -n "$char"
+    fi
+    clear
+    echo -n "Enter the file path: $file_path"
+    echo
+    echo "File size: $(get_file_size "$file_path")"
+done
+stty sane
+echo
+echo "Final file path: $file_path"
+echo "Final file size: $(get_file_size "$file_path")"
+#######
+
+
+
+4. Countdown with User Input: Write a script that asks the user for a duration in seconds and
+displays a countdown timer that updates every second until it reaches zero. Combine a loop with the
+sleep command for real-time updates.
+
+#######
+#!/bin/bash
+function timerr {
+    echo "enter time in seconds"
+    read time
+    while [[ $time -gt 0 ]]; do
+            echo -ne "\r$time seconds left"
+            time=$((time-1))
+            sleep 1
+    done
+    echo -e "\rTime's up!             "
+}
+
+#timerr | tail -n 1
+timerr
+#######
+
+
+5. Interactive Currency Converter: Write a script that prompts the user for an amount in their local
+currency and displays the equivalent value in another currency. Use a loop for continuous input and
+consider APIs for real-time conversion rates (may require additional research).
+
+#######
+
+#######
+
+6. Simple File Change Monitor: Write a script that monitors a specific file for changes. If the file
+modification time changes, the script displays a message indicating the file has been modified. Use
+the stat command for comparisons.
+
+#######
+
+#######
+
+
+7. Real-Time Fortune Teller (Simple): Write a script that displays a random fortune message. Use a
+loop and pre-defined fortunes stored in an array for real-time display.
+
+#######
+
+#######
+
+
+8. Simple System Info Display: Write a script that displays essential system information like the
+current user, hostname, and operating system version in real-time. Update the script to display this
+information periodically (e.g., every minute). (Use commands like whoami , hostname , and uname -r
+to retrieve the information).
+
+#######
+
+#######
+
+
+9. Free Disk Space Monitor: Write a script that checks the free disk space on a specific partition
+(e.g., / ) and displays the available space in megabytes (MB) or gigabytes (GB). Update the
+information periodically (e.g., every minute) using a loop.
+
+#######
+
+#######
+
+
+10. Simple File Watcher: Write a script that monitors a specific file for changes (modifications). Use a
+loop to check the file's last modified time and display a message if it has been updated since the
+script started.
+
+#######
+
+#######
+
+
+11.Network Health Monitoring Tool
+Objective: Create a script that checks the network health of your server. It should ping a set of
+predefined IPs or domain names and report any failures along with the timestamp. The script should
+log this information and send an alert (e.g., via email) if any of the pings fail.
+
+#######
+
+#######
+
+
+12.Log File Analyzer
+Develop a script that analyzes a specified log file (e.g., Apache or Nginx access log) and extracts
+information such as the most frequent IP addresses and request URLs. The script should also identify
+any error codes (like 404 or 500) and count their occurrences.
+
+#######
+
+#######
+
+
+13.User Account and Permission Audit Script
+Objective: Create a script that audits user accounts and file permissions in a system. The script
+should list all users, their last login time, and check for any files in sensitive directories (like /etc or
+/var) with permissions that are too permissive (e.g., world-writable files).
+
+#######
+
+#######
+
