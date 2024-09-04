@@ -213,6 +213,44 @@ done
 loop and pre-defined fortunes stored in an array for real-time display.
 
 #######
+#!/bin/bash
+
+# Array of predefined fortune messages
+fortunes=(
+    "You will have a great day today!"
+    "A surprise gift is headed your way."
+    "Your hard work will soon pay off."
+    "An exciting opportunity is waiting for you."
+    "You will meet someone who will change your life."
+    "Success is just around the corner."
+    "You will overcome your challenges with ease."
+    "Happiness is in your near future."
+    "You will find clarity in a difficult situation."
+    "A new adventure awaits you!"
+)
+
+# Function to display a random fortune
+display_fortune() {
+    # Get a random index within the range of the array
+    random_index=$((RANDOM % ${#fortunes[@]}))
+
+    # Display the random fortune
+    echo "🔮 ${fortunes[$random_index]}"
+}
+
+# Loop to continuously display fortunes
+while true; do
+    display_fortune
+
+    # Ask if the user wants another fortune
+    echo "Would you like another fortune? (yes/no)"
+    read answer
+
+    if [ "$answer" != "yes" ]; then
+        echo "Thank you for visiting the fortune teller!"
+        break
+    fi
+done
 
 #######
 
