@@ -279,7 +279,16 @@ done
 information periodically (e.g., every minute) using a loop.
 
 #######
+#!/bin/bash
+read -p "Enter the partition you want to monitor: " target_disk
 
+disk() {
+        df -h| grep "$target_disk"| awk '{print $4}'
+}
+while true; do
+        disk
+        sleep 60
+done
 #######
 
 
