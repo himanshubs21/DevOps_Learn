@@ -103,8 +103,66 @@ timerr
 5. Interactive Currency Converter: Write a script that prompts the user for an amount in their local
 currency and displays the equivalent value in another currency. Use a loop for continuous input and
 consider APIs for real-time conversion rates (may require additional research).
-
+Running the Script:
+===================
+Save the script as currency_converter.sh.
+Make it executable with chmod +x currency_converter.sh.
+Run the script with ./currency_converter.sh.
+======================
 #######
+#check for dependencies: 
+sudo apt-get install jq bc
+
+#!/bin/bash
+
+# Replace with your API key
+API_KEY="0f4a16f8333c88a909bcf23a"
+BASE_URL="https://v6.exchangerate-api.com/v6/$API_KEY/pair"
+
+# Function to convert currency
+convert_currency() {
+    local from_currency=$1
+    local to_currency=$2
+    local amount=$3
+
+    # Fetch the conversion rate using curl
+    response=$(curl -s "$BASE_URL/$from_currency/$to_currency")
+
+    # Extract the conversion rate from the response
+    rate=$(echo $response | jq -r '.conversion_rate')
+
+    # Calculate the converted amount
+    converted_amount=$(echo "$amount * $rate" | bc -l)
+
+    # Display the result
+    echo "$amount $from_currency is equivalent to $converted_amount $to_currency"
+}
+
+# Main loop for continuous input
+while true; do
+    # Prompt user for input
+    echo "Enter the amount you want to convert:"
+    read amount
+
+    echo "Enter the currency code you are converting from (e.g., USD):"
+    read from_currency
+
+    echo "Enter the currency code you are converting to (e.g., EUR):"
+    read to_currency
+
+    # Call the conversion function
+    convert_currency $from_currency $to_currency $amount
+
+    # Ask if the user wants to perform another conversion
+    echo "Do you want to perform another conversion? (yes/no)"
+    read answer
+
+    if [ "$answer" != "yes" ]; then
+        break
+    fi
+done
+
+echo "Thank you for using the currency converter!"
 
 #######
 
