@@ -261,7 +261,16 @@ information periodically (e.g., every minute). (Use commands like whoami , hostn
 to retrieve the information).
 
 #######
-
+#!/bin/bash
+dis() {
+    echo "Current user is $(whoami)"          # Prints the current logged-in username
+    echo "Hostname is $(hostname)"            # Prints the system's hostname
+    echo "Kernel version is $(uname -r)"      # Prints the kernel version
+}
+while true; do
+        dis
+        sleep 60
+done
 #######
 
 
