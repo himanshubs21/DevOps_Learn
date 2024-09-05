@@ -297,7 +297,33 @@ loop to check the file's last modified time and display a message if it has been
 script started.
 
 #######
+#!/bin/bash
+read -p "Enter the path/to/file or filename you want to monitor : " filename
 
+
+if [ ! -f "$filename" ]; then
+        echo "file not found"
+        exit 1
+
+fi
+
+
+
+mod_time() {
+        stat -c "%Y" "$filename"
+}
+
+last_mod_time=$(mod_time)
+echo "monitoring $filename"
+
+while true; do
+        current_mod_time=$(mod_time)
+        if [ "$current_mod_time" != $last_mod_time ]; then
+                echo "file modified"
+                last_mod_time="$current_mod_time"
+        fi
+        sleep 3
+done
 #######
 
 
