@@ -343,7 +343,48 @@ information such as the most frequent IP addresses and request URLs. The script 
 any error codes (like 404 or 500) and count their occurrences.
 
 #######
+#!/bin/bash
 
+# Prompt user for the path to the log file
+read -p "Enter the path to the log file: " log_file
+
+# Check if the file exists
+if [ ! -f "$log_file" ]; then
+    echo "File not found."
+    exit 1
+fi
+
+# Function to extract the most frequent IP addresses
+function most_frequent_ips() {
+    echo "Most frequent IP addresses:"
+    awk '{print $1}' "$log_file" | sort | uniq -c | sort -nr | head -n 10
+}
+
+# Function to extract the most frequent request URLs
+function most_frequent_urls() {
+    echo "Most frequent request URLs:"
+    awk '{print $7}' "$log_file" | sort | uniq -c | sort -nr | head -n 10
+}
+
+# Function to count occurrences of specific error codes
+function error_codes_count() {
+    echo "Error codes count:"
+    awk '{print $9}' "$log_file" | grep -E '^[45][0-9]{2}$' | sort | uniq -c | sort -nr
+}
+
+# Execute the functions
+most_frequent_ips
+echo
+most_frequent_urls
+echo
+error_codes_count
+
+
+==========================
+Notes:
+Adjust the field numbers in awk (e.g., $1, $7, $9) if your log format is different.
+The script assumes a common log format; you might need to adapt it based on your specific log format.
+==========================
 #######
 
 
