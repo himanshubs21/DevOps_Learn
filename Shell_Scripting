@@ -394,6 +394,37 @@ should list all users, their last login time, and check for any files in sensiti
 /var) with permissions that are too permissive (e.g., world-writable files).
 
 #######
+#!/bin/bash
+
+# User Account Audit
+echo "===== User Accounts and Last Login Audit ====="
+echo "Username         Last Login Time"
+echo "------------------------------------"
+awk -F':' '{ print $1 }' /etc/passwd | while read -r user; do
+    last_login=$(lastlog -u "$user" | tail -n 1 | awk '{print $4, $5, $6, $7}')
+    printf "%-16s %s\n" "$user" "$last_login"
+done
+
+# Permissions Audit
+echo ""
+echo "===== File Permissions Audit ====="
+echo "Checking for world-writable files in /etc and /var..."
+echo "------------------------------------"
+
+# Sensitive directories
+directories=("/etc" "/var")
+
+for dir in "${directories[@]}"; do
+    echo "Scanning $dir for world-writable files..."
+    find "$dir" -type f -perm /o+w -exec ls -l {} \;
+    echo "------------------------------------"
+done
+
+echo "Audit completed."
+===========================
+chmod +x audit_script.sh
+sudo ./audit_script.sh
+
 
 #######
 
